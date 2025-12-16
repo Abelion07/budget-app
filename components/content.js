@@ -1,0 +1,314 @@
+function elFromHTML(html) {
+  const t = document.createElement("template");
+  t.innerHTML = html.trim();
+  return t.content.firstElementChild;
+}
+
+function SummaryCards() {
+  return elFromHTML(`
+    <div class="grid cards foinfok">
+      <!-- SUMMARY CARDS -->
+      <!-- // DB: aggregált havi/aktuális időszak statisztikák -->
+      <!-- // szükséges: totalIncome, totalExpense, netBalance -->
+      <!-- // opcionális: prevIncome, prevExpense vagy százalékos változás -->
+      <!-- // pénznem: userSettings.currency -->
+      <article class="card">
+        <div class="card-head">
+          <div class="card-title">Bevétel</div>
+          <div class="pill pill-green">+ this month</div>
+        </div>
+        <div class="money">+ 420 000 Ft</div>
+        <div class="muted">Előző hónaphoz képest: +5%</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div class="card-title">Kiadás</div>
+          <div class="pill pill-red">- this month</div>
+        </div>
+        <div class="money">- 237 500 Ft</div>
+        <div class="muted">Előző hónaphoz képest: -2%</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div class="card-title">Egyenleg</div>
+          <div class="pill pill-blue">net</div>
+        </div>
+        <div class="money">182 500 Ft</div>
+        <div class="muted">Cél: 150 000 Ft/hó</div>
+      </article>
+    </div>
+  `);
+}
+
+function ChartAndQuickOverview() {
+  return elFromHTML(`
+    <div class="grid two-cols">
+      <!-- CHART + BREAKDOWN -->
+      <article class="card">
+        <div class="card-head">
+          <div class="card-title">Kiadások megoszlása</div>
+          <div class="card-actions">
+            <!-- // DB: nem kell; UI state: chartRange = monthly/yearly -->
+            <button class="btn btn-chip">Havi</button>
+            <button class="btn btn-chip">Éves</button>
+          </div>
+        </div>
+
+        <!-- Chart placeholder -->
+        <!-- // DB: expenseByCategory aggregáció -->
+        <!-- // pl. [{ categoryId, categoryName, totalAmount, percent }] -->
+        <!-- // rendezés: totalAmount desc, top N -->
+        <div class="chart">
+          <div class="chart-bar" style="--h: 68%;">
+            <span>Élelmiszer</span>
+            <strong>68%</strong>
+          </div>
+          <div class="chart-bar" style="--h: 38%;">
+            <span>Szórakozás</span><strong>38%</strong>
+          </div>
+          <div class="chart-bar" style="--h: 52%;">
+            <span>Közlekedés</span><strong>52%</strong>
+          </div>
+          <div class="chart-bar" style="--h: 24%;">
+            <span>Rezsi</span><strong>24%</strong>
+          </div>
+        </div>
+
+        <div class="muted">* Helyettesítő grafikon (JS-sel majd valódi chart lesz)</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div class="card-title">Gyors áttekintés</div>
+          <div class="pill pill-gray">tippek</div>
+        </div>
+
+        <!-- // DB: kiemelt elemek (topok) -->
+        <ul class="list">
+          <li>
+            <span class="dot dot-green"></span>
+            <div>
+              <div class="list-title">Legnagyobb bevétel</div>
+              <div class="muted">Fizetés — 400 000 Ft</div>
+            </div>
+          </li>
+          <li>
+            <span class="dot dot-red"></span>
+            <div>
+              <div class="list-title">Legnagyobb kiadás</div>
+              <div class="muted">Albérlet — 160 000 Ft</div>
+            </div>
+          </li>
+          <li>
+            <span class="dot dot-blue"></span>
+            <div>
+              <div class="list-title">Top kategória</div>
+              <div class="muted">Élelmiszer — 62 300 Ft</div>
+            </div>
+          </li>
+        </ul>
+      </article>
+    </div>
+  `);
+}
+
+function TransactionsSection() {
+  return elFromHTML(`
+    <div>
+      <!-- TRANSACTIONS -->
+      <div class="section-head" id="transactions">
+        <h2>Tranzakciók</h2>
+        <div class="section-actions">
+          <div class="filters">
+            <!-- // DB: nem kell; filter -> query param: type -->
+            <select>
+              <option>Összes típus</option>
+              <option>Bevétel</option>
+              <option>Kiadás</option>
+            </select>
+
+            <!-- // DB: categories lista -->
+            <select>
+              <option>Összes kategória</option>
+              <option>Élelmiszer</option>
+              <option>Rezsi</option>
+              <option>Közlekedés</option>
+              <option>Szórakozás</option>
+            </select>
+
+            <!-- // DB: nem kell; date range filter -> query: from, to -->
+            <input type="date" />
+            <input type="date" />
+          </div>
+
+          <!-- // DB: nem kell; export action -> backend generál CSV-t a current filter alapján -->
+          <button class="btn">Export CSV</button>
+        </div>
+      </div>
+
+      <article class="card table-card">
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Dátum</th>
+                <th>Leírás</th>
+                <th>Kategória</th>
+                <th class="right">Összeg</th>
+                <th class="right">Művelet</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>2025-12-12</td>
+                <td>Fizetés</td>
+                <td><span class="tag tag-green">Bevétel</span></td>
+                <td class="right amount pos">+ 400 000 Ft</td>
+                <td class="right">
+                  <button class="btn btn-small">Szerkeszt</button>
+                  <button class="btn btn-small btn-danger">Töröl</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2025-12-10</td>
+                <td>Albérlet</td>
+                <td><span class="tag tag-red">Rezsi</span></td>
+                <td class="right amount neg">- 160 000 Ft</td>
+                <td class="right">
+                  <button class="btn btn-small">Szerkeszt</button>
+                  <button class="btn btn-small btn-danger">Töröl</button>
+                </td>
+              </tr>
+              <tr>
+                <td>2025-12-09</td>
+                <td>SPAR</td>
+                <td><span class="tag tag-amber">Élelmiszer</span></td>
+                <td class="right amount neg">- 12 430 Ft</td>
+                <td class="right">
+                  <button class="btn btn-small">Szerkeszt</button>
+                  <button class="btn btn-small btn-danger">Töröl</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </div>
+  `);
+}
+
+function CategoriesSection() {
+  return elFromHTML(`
+    <div>
+      <!-- CATEGORIES -->
+      <div class="section-head" id="categories">
+        <h2>Kategóriák</h2>
+        <div class="section-actions">
+          <button class="btn">+ Új kategória</button>
+        </div>
+      </div>
+
+      <div class="grid category-grid">
+        <article class="card">
+          <div class="cat-row">
+            <div class="cat-icon">🍎</div>
+            <div class="cat-meta">
+              <div class="cat-title">Élelmiszer</div>
+              <div class="muted">Alap kategória</div>
+            </div>
+            <div class="cat-actions">
+              <button class="btn btn-small">Szerkeszt</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="cat-row">
+            <div class="cat-icon">🚇</div>
+            <div class="cat-meta">
+              <div class="cat-title">Közlekedés</div>
+              <div class="muted">Alap kategória</div>
+            </div>
+            <div class="cat-actions">
+              <button class="btn btn-small">Szerkeszt</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="cat-row">
+            <div class="cat-icon">🎬</div>
+            <div class="cat-meta">
+              <div class="cat-title">Szórakozás</div>
+              <div class="muted">Saját</div>
+            </div>
+            <div class="cat-actions">
+              <button class="btn btn-small">Szerkeszt</button>
+              <button class="btn btn-small btn-danger">Töröl</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  `);
+}
+
+function SettingsSection() {
+  return elFromHTML(`
+    <div>
+      <!-- SETTINGS -->
+      <div class="section-head" id="settings">
+        <h2>Beállítások</h2>
+      </div>
+
+      <article class="card">
+        <!-- // DB: userSettings (felhasználói beállítások) -->
+        <!-- // userSettings: { currency, defaultView, monthlyGoal? } -->
+        <div class="form-grid">
+          <label class="field">
+            <span>Pénznem</span>
+            <select>
+              <option>HUF</option>
+              <option>EUR</option>
+              <option>USD</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Alapértelmezett nézet</span>
+            <select>
+              <option>Havi</option>
+              <option>Heti</option>
+              <option>Éves</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>Mentés</span>
+            <button class="btn btn-primary" type="button">Beállítások mentése</button>
+          </label>
+        </div>
+      </article>
+    </div>
+  `);
+}
+
+export function Main() {
+  const main = document.createElement("main");
+  main.className = "main";
+
+  // MAIN
+  const content = document.createElement("section");
+  content.className = "content";
+
+  content.appendChild(SummaryCards());
+  content.appendChild(ChartAndQuickOverview());
+  content.appendChild(TransactionsSection());
+  content.appendChild(CategoriesSection());
+  content.appendChild(SettingsSection());
+
+  main.appendChild(content);
+  return main;
+}
