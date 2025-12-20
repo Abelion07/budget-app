@@ -12,30 +12,31 @@ function SummaryCards() {
       <!-- // szükséges: totalIncome, totalExpense, netBalance -->
       <!-- // opcionális: prevIncome, prevExpense vagy százalékos változás -->
       <!-- // pénznem: userSettings.currency -->
+
       <article class="card">
         <div class="card-head">
           <div class="card-title">Bevétel</div>
-          <div class="pill pill-green">+ this month</div>
+          <div class="pill pill-green">+ Ebben a hónapban</div>
         </div>
-        <div class="money">+ 420 000 Ft</div>
+        <div class="money obevetel">+ ? Ft</div>
         <div class="muted">Előző hónaphoz képest: +5%</div>
       </article>
 
       <article class="card">
         <div class="card-head">
           <div class="card-title">Kiadás</div>
-          <div class="pill pill-red">- this month</div>
+          <div class="pill pill-red">- Ebben a hónapban</div>
         </div>
-        <div class="money">- 237 500 Ft</div>
+        <div class="money okiadas">- ? Ft</div>
         <div class="muted">Előző hónaphoz képest: -2%</div>
       </article>
 
       <article class="card">
         <div class="card-head">
           <div class="card-title">Egyenleg</div>
-          <div class="pill pill-blue">net</div>
+          <div class="pill pill-blue">Összesen</div>
         </div>
-        <div class="money">182 500 Ft</div>
+        <div class="money osszesen">? Ft</div>
         <div class="muted">Cél: 150 000 Ft/hó</div>
       </article>
     </div>
@@ -91,21 +92,14 @@ function ChartAndQuickOverview() {
             <span class="dot dot-green"></span>
             <div>
               <div class="list-title">Legnagyobb bevétel</div>
-              <div class="muted">Fizetés — 400 000 Ft</div>
+              <div class="muted legnagyobb-bevetel">?</div>
             </div>
           </li>
           <li>
             <span class="dot dot-red"></span>
             <div>
               <div class="list-title">Legnagyobb kiadás</div>
-              <div class="muted">Albérlet — 160 000 Ft</div>
-            </div>
-          </li>
-          <li>
-            <span class="dot dot-blue"></span>
-            <div>
-              <div class="list-title">Top kategória</div>
-              <div class="muted">Élelmiszer — 62 300 Ft</div>
+              <div class="muted legnagyobb-kiadas">?</div>
             </div>
           </li>
         </ul>
@@ -160,38 +154,7 @@ function TransactionsSection() {
                 <th class="right">Művelet</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>2025-12-12</td>
-                <td>Fizetés</td>
-                <td><span class="tag tag-green">Bevétel</span></td>
-                <td class="right amount pos">+ 400 000 Ft</td>
-                <td class="right">
-                  <button class="btn btn-small">Szerkeszt</button>
-                  <button class="btn btn-small btn-danger">Töröl</button>
-                </td>
-              </tr>
-              <tr>
-                <td>2025-12-10</td>
-                <td>Albérlet</td>
-                <td><span class="tag tag-red">Rezsi</span></td>
-                <td class="right amount neg">- 160 000 Ft</td>
-                <td class="right">
-                  <button class="btn btn-small">Szerkeszt</button>
-                  <button class="btn btn-small btn-danger">Töröl</button>
-                </td>
-              </tr>
-              <tr>
-                <td>2025-12-09</td>
-                <td>SPAR</td>
-                <td><span class="tag tag-amber">Élelmiszer</span></td>
-                <td class="right amount neg">- 12 430 Ft</td>
-                <td class="right">
-                  <button class="btn btn-small">Szerkeszt</button>
-                  <button class="btn btn-small btn-danger">Töröl</button>
-                </td>
-              </tr>
-            </tbody>
+            <tbody class="tablazatbody"></tbody>
           </table>
         </div>
       </article>
@@ -211,45 +174,7 @@ function CategoriesSection() {
       </div>
 
       <div class="grid category-grid">
-        <article class="card">
-          <div class="cat-row">
-            <div class="cat-icon">🍎</div>
-            <div class="cat-meta">
-              <div class="cat-title">Élelmiszer</div>
-              <div class="muted">Alap kategória</div>
-            </div>
-            <div class="cat-actions">
-              <button class="btn btn-small">Szerkeszt</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="cat-row">
-            <div class="cat-icon">🚇</div>
-            <div class="cat-meta">
-              <div class="cat-title">Közlekedés</div>
-              <div class="muted">Alap kategória</div>
-            </div>
-            <div class="cat-actions">
-              <button class="btn btn-small">Szerkeszt</button>
-            </div>
-          </div>
-        </article>
-
-        <article class="card">
-          <div class="cat-row">
-            <div class="cat-icon">🎬</div>
-            <div class="cat-meta">
-              <div class="cat-title">Szórakozás</div>
-              <div class="muted">Saját</div>
-            </div>
-            <div class="cat-actions">
-              <button class="btn btn-small">Szerkeszt</button>
-              <button class="btn btn-small btn-danger">Töröl</button>
-            </div>
-          </div>
-        </article>
+        
       </div>
     </div>
   `);
@@ -307,7 +232,6 @@ export function Main() {
   content.appendChild(ChartAndQuickOverview());
   content.appendChild(TransactionsSection());
   content.appendChild(CategoriesSection());
-  content.appendChild(SettingsSection());
 
   main.appendChild(content);
   return main;

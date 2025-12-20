@@ -29,7 +29,8 @@ app.get("/api/users/transactions", async (req, res) => {
         akt_osszpenz,
         categories (
           id,
-          kat_nev
+          kat_nev,
+          icons,
         )
       )
     `
@@ -48,6 +49,10 @@ app.get("/api/users/transactions", async (req, res) => {
 app.get("/api/users/:id/transactions", async (req, res) => {
   const userId = Number(req.params.id);
 
+  if (!userId) {
+    return res.status(400).json({ error: "Invalid user id" });
+  }
+
   const { data, error } = await supabase
     .from("users")
     .select(
@@ -61,15 +66,21 @@ app.get("/api/users/:id/transactions", async (req, res) => {
         osszeg,
         tipus,
         akt_osszpenz,
-        categories ( id, kat_nev )
+        categories ( id, kat_nev, icons )
       )
     `
     )
     .eq("id", userId)
     .maybeSingle();
 
-  if (error) return res.status(500).json({ error: error.message });
-  if (!data) return res.status(404).json({ error: "User not found" });
+  if (error) {
+    return res.status(500).json({ error: error.message });
+  }
+
+  if (!data) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
   return res.json(data);
 });
 

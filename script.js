@@ -1,11 +1,19 @@
 import { App } from "./components/app.js";
+import { loadCurrentUser } from "./api/api.js"
+import { bindSidebarUser } from "./render/sidebarUser.js"
+import { bevetelkiadas } from "./render/bevetelkiadas.js";
+import { bindStatistics } from "./render/statistics.js";
+import { bindTransactions } from "./render/transactions.js";
+import { bindCategories } from "./render/categories.js";
+
 const root = document.querySelector("#root");
 root.appendChild(App());
 
-function lekeres() {
-  return fetch("http://localhost:3001/api/users/3/transactions").then((r) =>
-    r.json()
-  );
-}
+bindSidebarUser(document);
+bindStatistics(document);
+bevetelkiadas(document);
+bindTransactions(document);
+bindCategories(document)
 
-lekeres().then((data) => console.log("adat:", data));
+const userId = 2;
+loadCurrentUser(userId).catch(console.error);

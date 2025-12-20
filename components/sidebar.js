@@ -20,6 +20,9 @@ function SidebarNav() {
   return elFromHTML(`
     <nav class="nav">
       <!-- // DB: nem kell, de route alapján 'active' class -->
+      <a class="nav-item btn">
+      <span class="ujtran ">💸</span> Új tranzakció
+      </a>
       <a class="nav-item active" href="#dashboard">
         <span class="nav-icon">📊</span> Dashboard
       </a>
@@ -42,10 +45,10 @@ function SidebarFooter() {
       <!-- // DB: user adatok -->
       <!-- // user: { id, name, email, avatarInitial/ avatarUrl } -->
       <div class="user-card">
-        <div class="avatar">A</div>
+        <div class="avatar">?</div>
         <div class="user-meta">
-          <div class="user-name">Ábel</div>
-          <div class="user-email">abel@email.com</div>
+          <div class="user-name">-</div>
+          <div class="user-email">-</div>
         </div>
       </div>
 
