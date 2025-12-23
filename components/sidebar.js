@@ -20,7 +20,7 @@ function SidebarNav() {
   return elFromHTML(`
     <nav class="nav">
       <!-- // DB: nem kell, de route alapján 'active' class -->
-      <a class="nav-item btn">
+      <a class="nav-item btn uj-tranzakcio">
       <span class="ujtran ">💸</span> Új tranzakció
       </a>
       <a class="nav-item active" href="#dashboard">

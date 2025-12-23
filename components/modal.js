@@ -4,9 +4,21 @@ function elFromHTML(html) {
   return t.content.firstElementChild;
 }
 
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".uj-tranzakcio")) {
+    document.querySelector(".modal")?.classList.add("is-open");
+  }
+});
+
+document.addEventListener("click", (e) => {
+  if (e.target.closest(".btn-close")) {
+    document.querySelector(".modal")?.classList.remove("is-open");
+  }
+});
+
 export function TransactionModal() {
   return elFromHTML(`
-    <div class="modal" aria-hidden="true">
+    <div class="modal is-open" aria-hidden="true">
       <!-- MODAL (demo: add "is-open" a classhoz, ha meg akarod jeleníteni) -->
       <!-- // DB: categories lista a dropdownhoz -->
       <!-- // DB: createTransaction endpoint (mentés) -->
@@ -15,7 +27,7 @@ export function TransactionModal() {
         <div class="modal-head">
           <h3 id="modalTitle">Új tranzakció</h3>
           <!-- // DB: nem kell; modal close -->
-          <button class="btn btn-ghost btn-small" type="button">✕</button>
+          <button class="btn btn-ghost btn-small btn-close" type="button">✕</button>
         </div>
 
         <form class="form">
@@ -32,7 +44,7 @@ export function TransactionModal() {
             <label class="field">
               <span>Összeg</span>
               <!-- // DB: amount (validáció: > 0), currency: userSettings.currency -->
-              <input type="number" placeholder="pl. 12430" />
+              <input type="number" placeholder="pl. 12430" min="0"/>
             </label>
 
             <label class="field">
@@ -45,24 +57,16 @@ export function TransactionModal() {
               <span>Kategória</span>
               <!-- // DB: categories: [{id,name}] -->
               <!-- // DB: transaction.categoryId -->
-              <select>
-                <option>Élelmiszer</option>
-                <option>Rezsi</option>
-                <option>Közlekedés</option>
-                <option>Szórakozás</option>
+              <select class="select-categories">
               </select>
             </label>
 
-            <label class="field full">
-              <span>Megjegyzés</span>
-              <!-- // DB: description/note (string) -->
-              <input type="text" placeholder="pl. Spar / benzin / mozi..." />
-            </label>
+
+           
           </div>
 
           <div class="form-actions">
             <!-- // DB: nem kell; modal close -->
-            <button class="btn" type="button">Mégse</button>
             <!-- // DB: POST /transactions { type, amount, date, categoryId, note } -->
             <button class="btn btn-primary" type="submit">Mentés</button>
           </div>
@@ -71,3 +75,9 @@ export function TransactionModal() {
     </div>
   `);
 }
+
+//  <label class="field full">
+//               <span>Megjegyzés</span>
+//               <!-- // DB: description/note (string) -->
+//               <input type="text" placeholder="pl. Spar / benzin / mozi..." />
+//             </label>

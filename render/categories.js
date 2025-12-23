@@ -27,5 +27,9 @@ export function bindCategories(root = document) {
           </div>
         </article>`;
     })
+    const select_categories = document.querySelector(".select-categories");
+    result.forEach(element => {
+      select_categories.innerHTML+= `<option>${element[0]}</option>`
+    })
   });
 }
