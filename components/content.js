@@ -62,22 +62,9 @@ function ChartAndQuickOverview() {
         <!-- // pl. [{ categoryId, categoryName, totalAmount, percent }] -->
         <!-- // rendezés: totalAmount desc, top N -->
         <div class="chart">
-          <div class="chart-bar" style="--h: 68%;">
-            <span>Élelmiszer</span>
-            <strong>68%</strong>
-          </div>
-          <div class="chart-bar" style="--h: 38%;">
-            <span>Szórakozás</span><strong>38%</strong>
-          </div>
-          <div class="chart-bar" style="--h: 52%;">
-            <span>Közlekedés</span><strong>52%</strong>
-          </div>
-          <div class="chart-bar" style="--h: 24%;">
-            <span>Rezsi</span><strong>24%</strong>
-          </div>
         </div>
 
-        <div class="muted">* Helyettesítő grafikon (JS-sel majd valódi chart lesz)</div>
+        <!-- <div class="muted">* Helyettesítő grafikon (JS-sel majd valódi chart lesz)</div> -->
       </article>
 
       <article class="card">

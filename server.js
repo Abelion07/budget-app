@@ -19,7 +19,8 @@ app.get("/api/users/transactions", async (req, res) => {
     .select(
       `
       id,
-      nev,
+      first_name,
+      last_name,
       email,
       transactions (
         id,
@@ -58,7 +59,8 @@ app.get("/api/users/:id/transactions", async (req, res) => {
     .select(
       `
       id,
-      nev,
+      first_name,
+      last_name,
       email,
       transactions (
         id,

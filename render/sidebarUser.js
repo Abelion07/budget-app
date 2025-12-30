@@ -10,9 +10,10 @@ export function bindSidebarUser(root = document) {
   store.subscribe(() => {
     const u = store.user;
     if (!u) return;
+    // console.log(u)
 
-    avatarEl.textContent = u.nev?.[0]?.toUpperCase?.() ?? "?";
-    nameEl.textContent = u.nev ?? "-";
+    avatarEl.textContent = u.first_name?.[0]?.toUpperCase?.() ?? "?";
+    nameEl.textContent = u.first_name ?? "-";
     emailEl.textContent = u.email ?? "-";
   });
 }

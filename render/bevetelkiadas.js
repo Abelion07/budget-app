@@ -7,7 +7,7 @@ export function bevetelkiadas(root = document) {
   const hu = new Intl.NumberFormat("hu-HU"); // 1 234 567
 
   store.subscribe(() => {
-    const t = store.transactions;
+    const t = [...store.transactions].sort((a, b) => b.id - a.id);
     // console.log(t.filter(w => w.tipus === "kiadas"));
     let sumkiadas = t
       .filter((w) => w.tipus === "Kiadás")
@@ -22,6 +22,6 @@ export function bevetelkiadas(root = document) {
       return new Date(curr.datum) > new Date(max.datum) ? curr : max;
     });
 
-    osszespenz.textContent = `${hu.format(osszpenz.akt_osszpenz)} Ft`
+    osszespenz.textContent = `${hu.format(osszpenz.akt_osszpenz)} Ft`;
   });
 }

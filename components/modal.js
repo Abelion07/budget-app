@@ -18,7 +18,7 @@ document.addEventListener("click", (e) => {
 
 export function TransactionModal() {
   return elFromHTML(`
-    <div class="modal is-open" aria-hidden="true">
+    <div class="modal" aria-hidden="true">
       <!-- MODAL (demo: add "is-open" a classhoz, ha meg akarod jeleníteni) -->
       <!-- // DB: categories lista a dropdownhoz -->
       <!-- // DB: createTransaction endpoint (mentés) -->
