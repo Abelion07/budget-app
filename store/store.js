@@ -1,11 +1,17 @@
 export const store = {
   user: null,
   transactions: [],
+  categories: [], // ✅
   listeners: new Set(),
 
   setUser(data) {
     this.user = data;
     this.transactions = data?.transactions ?? [];
+    this.emit();
+  },
+
+  setCategories(kat) {
+    this.categories = kat; // ✅ teljes lista
     this.emit();
   },
 
@@ -16,5 +22,5 @@ export const store = {
 
   emit() {
     for (const fn of this.listeners) fn(this);
-  },
+  }
 };

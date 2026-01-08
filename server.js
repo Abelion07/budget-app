@@ -13,6 +13,16 @@ app.use(express.json());
  * GET /api/users/transactions
  * Minden user + hozzatartozo tranzakciok + kategoriak (goals nelkul)
  */
+
+app.get("/api/allcategories", async (req, res) => {
+  const { data, error } = await supabase
+    .from("categories")
+    .select(`*`)
+    .order("id", { ascending: true });
+  if (error) return res.status(500).json({ error: error.message });
+  return res.json(data);
+});
+
 app.get("/api/users/transactions", async (req, res) => {
   const { data, error } = await supabase
     .from("users")

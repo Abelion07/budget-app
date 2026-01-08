@@ -612,6 +612,7 @@ input:focus {
 }
 .modal.is-open {
   display: flex;
+  z-index: 999;
 }
 .modal-backdrop {
   position: absolute;

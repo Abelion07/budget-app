@@ -8,20 +8,41 @@ export function bevetelkiadas(root = document) {
 
   store.subscribe(() => {
     const t = [...store.transactions].sort((a, b) => b.id - a.id);
-    // console.log(t.filter(w => w.tipus === "kiadas"));
-    let sumkiadas = t
-      .filter((w) => w.tipus === "Kiadás")
-      .reduce((sum, w) => sum + w.osszeg, 0);
-    osszeskiadas.textContent = `-${hu.format(sumkiadas)} Ft` ?? "?";
-    let sumbevetel = t
-      .filter((w) => w.tipus === "Bevétel")
-      .reduce((sum, w) => sum + w.osszeg, 0);
-    osszesbevetel.textContent = `+${hu.format(sumbevetel)} Ft` ?? "?";
-    // console.log(t);
-    const osszpenz = t.reduce((max, curr) => {
-      return new Date(curr.datum) > new Date(max.datum) ? curr : max;
+
+    // aktuális hónap
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+
+    // csak az aktuális hónap tranzakciói
+    const thisMonth = t.filter((item) => {
+      const d = new Date(item.datum);
+      return d.getFullYear() === currentYear && d.getMonth() === currentMonth;
     });
 
-    osszespenz.textContent = `${hu.format(osszpenz.akt_osszpenz)} Ft`;
+    // összkiadás (aktuális hónap)
+    const sumkiadas = thisMonth
+      .filter((w) => w.tipus === "Kiadás")
+      .reduce((sum, w) => sum + w.osszeg, 0);
+
+    osszeskiadas.textContent = `-${hu.format(sumkiadas)} Ft`;
+
+    // összbevétel (aktuális hónap)
+    const sumbevetel = thisMonth
+      .filter((w) => w.tipus === "Bevétel")
+      .reduce((sum, w) => sum + w.osszeg, 0);
+
+    osszesbevetel.textContent = `+${hu.format(sumbevetel)} Ft`;
+
+    // aktuális összvagyon (legutóbbi tranzakció)
+    if (t.length > 0) {
+      const osszpenz = t.reduce((latest, curr) =>
+        new Date(curr.datum) > new Date(latest.datum) ? curr : latest
+      );
+
+      osszespenz.textContent = `${hu.format(osszpenz.akt_osszpenz)} Ft`;
+    } else {
+      osszespenz.textContent = "0 Ft";
+    }
   });
 }

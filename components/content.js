@@ -6,20 +6,19 @@ function elFromHTML(html) {
 
 function SummaryCards() {
   return elFromHTML(`
-    <div class="grid cards foinfok">
+    <div class="grid cards foinfok" id="dashboard">
       <!-- SUMMARY CARDS -->
       <!-- // DB: aggregált havi/aktuális időszak statisztikák -->
       <!-- // szükséges: totalIncome, totalExpense, netBalance -->
       <!-- // opcionális: prevIncome, prevExpense vagy százalékos változás -->
       <!-- // pénznem: userSettings.currency -->
-
+      
       <article class="card">
         <div class="card-head">
           <div class="card-title">Bevétel</div>
           <div class="pill pill-green">+ Ebben a hónapban</div>
         </div>
         <div class="money obevetel">+ ? Ft</div>
-        <div class="muted">Előző hónaphoz képest: +5%</div>
       </article>
 
       <article class="card">
@@ -28,7 +27,6 @@ function SummaryCards() {
           <div class="pill pill-red">- Ebben a hónapban</div>
         </div>
         <div class="money okiadas">- ? Ft</div>
-        <div class="muted">Előző hónaphoz képest: -2%</div>
       </article>
 
       <article class="card">
@@ -37,8 +35,8 @@ function SummaryCards() {
           <div class="pill pill-blue">Összesen</div>
         </div>
         <div class="money osszesen">? Ft</div>
-        <div class="muted">Cél: 150 000 Ft/hó</div>
       </article>
+
     </div>
   `);
 }

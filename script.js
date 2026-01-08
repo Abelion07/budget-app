@@ -1,5 +1,5 @@
 import { App } from "./components/app.js";
-import { loadCurrentUser } from "./api/api.js"
+import { loadCurrentUser, loadCategories } from "./api/api.js"
 import { bindSidebarUser } from "./render/sidebarUser.js"
 import { bevetelkiadas } from "./render/bevetelkiadas.js";
 import { bindStatistics } from "./render/statistics.js";
@@ -19,4 +19,4 @@ bindGraphics(document);
 
 
 const userId = 2;
-loadCurrentUser(userId).catch(console.error);
+loadCurrentUser(userId).catch(console.error).then(loadCategories());

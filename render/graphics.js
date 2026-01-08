@@ -4,8 +4,19 @@ export function bindGraphics(root = document) {
   store.subscribe(() => {
     const t = store.transactions;
 
+    // aktuális hónap
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+
+    // 0) csak az aktuális hónap tranzakciói
+    const thisMonthTransactions = t.filter((item) => {
+      const d = new Date(item.datum);
+      return d.getFullYear() === currentYear && d.getMonth() === currentMonth;
+    });
+
     // 1) csak a kiadások
-    const tkiadas = t.filter((x) => x.tipus === "Kiadás");
+    const tkiadas = thisMonthTransactions.filter((x) => x.tipus === "Kiadás");
 
     // 2) groupby + count kategórianév alapján
     const grouped = Object.values(
@@ -24,25 +35,22 @@ export function bindGraphics(root = document) {
     // 3) rendezés count szerint csökkenő
     const adatok = grouped.sort((a, b) => b.count - a.count);
 
-    // console.log(adatok);
+    // százalék számítás
+    const osszeg = adatok.reduce((sum, e) => sum + e.count, 0);
+    const egyszazalek = osszeg ? 100 / osszeg : 0;
 
-    let osszeg = 0;
-    adatok.forEach((element) => {
-      osszeg += element.count;
-    });
-    // console.log(osszeg);
-    let egyszazalek = 100 / osszeg;
-    // console.log(egyszazalek);
     const chart = document.querySelector(".chart");
+    chart.innerHTML = ""; // fontos: ne duplázzon
+
     adatok.forEach((element) => {
       chart.innerHTML += `
         <div class="chart-bar" style="--h: ${(
           element.count * egyszazalek
         ).toFixed(0)}%;">
-            <span>${element.kat_nev}</span>
-            <strong>${(element.count * egyszazalek).toFixed(2)}%</strong>
-          </div>
-        `;
+          <span>${element.kat_nev}</span>
+          <strong>${(element.count * egyszazalek).toFixed(2)}%</strong>
+        </div>
+      `;
     });
   });
 }

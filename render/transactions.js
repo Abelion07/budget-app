@@ -6,7 +6,7 @@ export function bindTransactions(root = document) {
   store.subscribe(() => {
     const t = [...store.transactions].sort((a, b) => b.id - a.id);
 
-    console.log(t);
+    // console.log(t);
 
     t.forEach((element) => {
       // console.log(element);
