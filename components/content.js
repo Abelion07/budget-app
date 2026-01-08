@@ -102,28 +102,20 @@ function TransactionsSection() {
         <div class="section-actions">
           <div class="filters">
             <!-- // DB: nem kell; filter -> query param: type -->
-            <select>
-              <option>Összes típus</option>
-              <option>Bevétel</option>
-              <option>Kiadás</option>
+            <select class="filter-type">
+              <option value="all">Összes típus</option>
+              <option value="Bevétel">Bevétel</option>
+              <option value="Kiadás">Kiadás</option>
             </select>
 
             <!-- // DB: categories lista -->
-            <select>
-              <option>Összes kategória</option>
-              <option>Élelmiszer</option>
-              <option>Rezsi</option>
-              <option>Közlekedés</option>
-              <option>Szórakozás</option>
+            <select class="filter-category">
+              <option value="all">Összes kategória</option>
             </select>
-
-            <!-- // DB: nem kell; date range filter -> query: from, to -->
-            <input type="date" />
-            <input type="date" />
           </div>
 
           <!-- // DB: nem kell; export action -> backend generál CSV-t a current filter alapján -->
-          <button class="btn">Export CSV</button>
+          <!--<button class="btn">Export CSV</button>-->
         </div>
       </div>
 
@@ -217,6 +209,7 @@ export function Main() {
   content.appendChild(ChartAndQuickOverview());
   content.appendChild(TransactionsSection());
   content.appendChild(CategoriesSection());
+  content.appendChild(SettingsSection());
 
   main.appendChild(content);
   return main;

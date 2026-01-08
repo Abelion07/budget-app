@@ -17,6 +17,10 @@
   --focus: rgba(100, 169, 255, 0.35);
 }
 
+h2{
+  padding-left: 15px;
+}
+
 * {
   box-sizing: border-box;
 }

@@ -1,19 +1,37 @@
 import { deleteTransaction, loadCurrentUser } from "../api/api.js";
 import { store } from "../store/store.js";
 
-export function bindTransactions(root = document) {
-  const tablazatbody = document.querySelector(".tablazatbody");
-  const hu = new Intl.NumberFormat("hu-HU");
-  store.subscribe(() => {
-    const t = [...store.transactions].sort((a, b) => b.id - a.id);
+let currentTypeFilter = "all";
+let currentCategoryFilter = "all";
+let tablazatbodyRef = null;
 
-    if (!tablazatbody) return;
-    tablazatbody.innerHTML = "";
+function applyTypeFilter(items) {
+  if (currentTypeFilter === "all") return items;
+  return items.filter((item) => item.tipus === currentTypeFilter);
+}
 
-    t.forEach((element) => {
-      const penz = element.osszeg;
-      const tipus = element.tipus;
-      tablazatbody.innerHTML += `<tr>
+function applyCategoryFilter(items) {
+  if (currentCategoryFilter === "all") return items;
+  const targetId = Number(currentCategoryFilter);
+  return items.filter((item) => item.category_id === targetId);
+}
+
+const hu = new Intl.NumberFormat("hu-HU");
+
+function renderTransactions() {
+  if (!tablazatbodyRef) return;
+  const t = applyCategoryFilter(
+    applyTypeFilter(
+      [...store.transactions].sort((a, b) => b.id - a.id)
+    )
+  );
+
+  tablazatbodyRef.innerHTML = "";
+
+  t.forEach((element) => {
+    const penz = element.osszeg;
+    const tipus = element.tipus;
+    tablazatbodyRef.innerHTML += `<tr>
                 <td>${element.datum}</td>
                 <td>${element.categories.icons} ${
         element.categories.kat_nev
@@ -29,8 +47,13 @@ export function bindTransactions(root = document) {
                   <button class="btn btn-small btn-danger btn-delete-transaction" data-id="${element.id}">Töröl</button>
                 </td>
               </tr>`;
-    });
   });
+}
+
+export function bindTransactions(root = document) {
+  tablazatbodyRef = root.querySelector(".tablazatbody");
+  store.subscribe(renderTransactions);
+  renderTransactions();
 }
 
 document.addEventListener("click", async (e) => {
@@ -47,4 +70,18 @@ document.addEventListener("click", async (e) => {
   } catch (err) {
     console.error(err);
   }
+});
+
+document.addEventListener("change", (e) => {
+  const select = e.target.closest(".filter-type");
+  if (!select) return;
+  currentTypeFilter = select.value || "all";
+  renderTransactions();
+});
+
+document.addEventListener("change", (e) => {
+  const select = e.target.closest(".filter-category");
+  if (!select) return;
+  currentCategoryFilter = select.value || "all";
+  renderTransactions();
 });
