@@ -21,7 +21,6 @@ export function bindCategories(root = document) {
             <div class="cat-icon">${cat.icons}</div>
             <div class="cat-meta">
               <div class="cat-title">${cat.kat_nev}</div>
-              <div class="muted">Alap kategória</div>
             </div>
             <div class="cat-actions">
               <button class="btn btn-small">Szerkeszt</button>

@@ -33,3 +33,27 @@ export async function createTransaction(userId, payload) {
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
   return r.json();
 }
+
+export async function updateTransaction(userId, transactionId, payload) {
+  const r = await fetch(
+    `http://localhost:3001/api/users/${userId}/transactions/${transactionId}`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    }
+  );
+
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+export async function deleteTransaction(userId, transactionId) {
+  const r = await fetch(
+    `http://localhost:3001/api/users/${userId}/transactions/${transactionId}`,
+    { method: "DELETE" }
+  );
+
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}

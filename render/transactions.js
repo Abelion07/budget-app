@@ -1,3 +1,4 @@
+import { deleteTransaction, loadCurrentUser } from "../api/api.js";
 import { store } from "../store/store.js";
 
 export function bindTransactions(root = document) {
@@ -24,10 +25,26 @@ export function bindTransactions(root = document) {
                   tipus == "Bevétel" ? "pos" : "neg"
                 }">${tipus == "Bevétel" ? "+" : "-"} ${hu.format(penz)} Ft</td>
                 <td class="right">
-                  <button class="btn btn-small">Szerkeszt</button>
-                  <button class="btn btn-small btn-danger">Töröl</button>
+                  <button class="btn btn-small btn-edit-transaction" data-id="${element.id}">Szerkeszt</button>
+                  <button class="btn btn-small btn-danger btn-delete-transaction" data-id="${element.id}">Töröl</button>
                 </td>
               </tr>`;
     });
   });
 }
+
+document.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".btn-delete-transaction");
+  if (!btn) return;
+
+  const id = Number(btn.dataset.id);
+  const userId = store.user?.id;
+  if (!id || !userId) return;
+
+  try {
+    await deleteTransaction(userId, id);
+    await loadCurrentUser(userId);
+  } catch (err) {
+    console.error(err);
+  }
+});

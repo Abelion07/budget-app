@@ -9,6 +9,35 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+async function recalcUserTotals(userId) {
+  const { data: allTx, error: allError } = await supabase
+    .from("transactions")
+    .select("id, user_id, datum, osszeg, tipus")
+    .eq("user_id", userId)
+    .order("datum", { ascending: true })
+    .order("id", { ascending: true });
+
+  if (allError) {
+    return { error: allError };
+  }
+
+  let runningTotal = 0;
+  for (const tx of allTx) {
+    const delta = tx.tipus === "Bevétel" ? tx.osszeg : -tx.osszeg;
+    runningTotal += delta;
+    const { error: recalError } = await supabase
+      .from("transactions")
+      .update({ akt_osszpenz: runningTotal })
+      .eq("id", tx.id)
+      .eq("user_id", userId);
+    if (recalError) {
+      return { error: recalError };
+    }
+  }
+
+  return { data: allTx };
+}
+
 /**
  * GET /api/users/transactions
  * Minden user + hozzatartozo tranzakciok + kategoriak (goals nelkul)
@@ -34,6 +63,7 @@ app.get("/api/users/transactions", async (req, res) => {
       email,
       transactions (
         id,
+        category_id,
         datum,
         osszeg,
         tipus,
@@ -74,6 +104,7 @@ app.get("/api/users/:id/transactions", async (req, res) => {
       email,
       transactions (
         id,
+        category_id,
         datum,
         osszeg,
         tipus,
@@ -157,6 +188,90 @@ app.post("/api/users/:id/transactions", async (req, res) => {
   }
 
   return res.status(201).json(data);
+});
+
+/**
+ * PUT /api/users/:id/transactions/:transactionId
+ * Tranzakció frissítése + akt_osszpenz újraszámolás
+ */
+app.put("/api/users/:id/transactions/:transactionId", async (req, res) => {
+  const userId = Number(req.params.id);
+  const transactionId = Number(req.params.transactionId);
+  const { type, amount, date, categoryId } = req.body ?? {};
+
+  if (!userId || !transactionId) {
+    return res.status(400).json({ error: "Invalid user id or transaction id" });
+  }
+
+  const parsedAmount = Number(amount);
+  const parsedCategoryId = Number(categoryId);
+  const allowedTypes = new Set(["Bevétel", "Kiadás"]);
+
+  if (
+    !allowedTypes.has(type) ||
+    !Number.isFinite(parsedAmount) ||
+    parsedAmount <= 0 ||
+    !parsedCategoryId ||
+    !date
+  ) {
+    return res.status(400).json({ error: "Invalid payload" });
+  }
+
+  const { data: updated, error: updateError } = await supabase
+    .from("transactions")
+    .update({
+      category_id: parsedCategoryId,
+      datum: date,
+      osszeg: parsedAmount,
+      tipus: type,
+    })
+    .eq("id", transactionId)
+    .eq("user_id", userId)
+    .select("id, user_id, category_id, datum, osszeg, tipus, akt_osszpenz")
+    .single();
+
+  if (updateError) {
+    return res.status(500).json({ error: updateError.message });
+  }
+
+  const { error: recalcError } = await recalcUserTotals(userId);
+  if (recalcError) {
+    return res.status(500).json({ error: recalcError.message });
+  }
+
+  return res.json(updated);
+});
+
+/**
+ * DELETE /api/users/:id/transactions/:transactionId
+ * Tranzakció törlése + akt_osszpenz újraszámolás
+ */
+app.delete("/api/users/:id/transactions/:transactionId", async (req, res) => {
+  const userId = Number(req.params.id);
+  const transactionId = Number(req.params.transactionId);
+
+  if (!userId || !transactionId) {
+    return res.status(400).json({ error: "Invalid user id or transaction id" });
+  }
+
+  const { data: deleted, error: delError } = await supabase
+    .from("transactions")
+    .delete()
+    .eq("id", transactionId)
+    .eq("user_id", userId)
+    .select("id, user_id")
+    .maybeSingle();
+
+  if (delError) {
+    return res.status(500).json({ error: delError.message });
+  }
+
+  const { error: recalcError } = await recalcUserTotals(userId);
+  if (recalcError) {
+    return res.status(500).json({ error: recalcError.message });
+  }
+
+  return res.json({ ok: true, deleted });
 });
 
 app.get("/api/status", (req, res) => {

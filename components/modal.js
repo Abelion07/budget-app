@@ -1,4 +1,8 @@
-import { createTransaction, loadCurrentUser } from "../api/api.js";
+import {
+  createTransaction,
+  loadCurrentUser,
+  updateTransaction,
+} from "../api/api.js";
 import { store } from "../store/store.js";
 
 function elFromHTML(html) {
@@ -11,18 +15,63 @@ function todayIso() {
   return new Date().toISOString().slice(0, 10);
 }
 
+function openModal() {
+  document.querySelector(".modal")?.classList.add("is-open");
+  const dateInput = document.querySelector(".modal .input-date");
+  if (dateInput && !dateInput.value) dateInput.value = todayIso();
+}
+
+function closeModal() {
+  document.querySelector(".modal")?.classList.remove("is-open");
+}
+
+function setEditState(transactionId, isEditing) {
+  const form = document.querySelector(".modal .form");
+  if (!form) return;
+  form.dataset.editingId = isEditing ? String(transactionId) : "";
+  const title = document.querySelector(".modal #modalTitle");
+  if (title) title.textContent = isEditing ? "Tranzakció szerkesztése" : "Új tranzakció";
+}
+
+function fillFormFromTransaction(tx) {
+  const form = document.querySelector(".modal .form");
+  if (!form || !tx) return;
+  const typeSelect = form.querySelector(".select-type");
+  const amountInput = form.querySelector(".input-amount");
+  const dateInput = form.querySelector(".input-date");
+  const categorySelect = form.querySelector(".select-categories");
+
+  if (typeSelect) typeSelect.value = tx.tipus;
+  if (amountInput) amountInput.value = tx.osszeg;
+  if (dateInput) dateInput.value = tx.datum;
+  if (categorySelect) categorySelect.value = String(tx.category_id ?? tx.categories?.id ?? "");
+}
+
 document.addEventListener("click", (e) => {
   if (e.target.closest(".uj-tranzakcio")) {
-    document.querySelector(".modal")?.classList.add("is-open");
-    const dateInput = document.querySelector(".modal .input-date");
-    if (dateInput && !dateInput.value) dateInput.value = todayIso();
+    setEditState(null, false);
+    openModal();
   }
 });
 
 document.addEventListener("click", (e) => {
   if (e.target.closest(".btn-close")) {
-    document.querySelector(".modal")?.classList.remove("is-open");
+    closeModal();
   }
+});
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".btn-edit-transaction");
+  if (!btn) return;
+
+  const id = Number(btn.dataset.id);
+  if (!id) return;
+  const tx = store.transactions.find((item) => item.id === id);
+  if (!tx) return;
+
+  setEditState(id, true);
+  fillFormFromTransaction(tx);
+  openModal();
 });
 
 document.addEventListener("submit", async (e) => {
@@ -40,6 +89,7 @@ document.addEventListener("submit", async (e) => {
 
   const amount = Number(amountRaw);
   const userId = store.user?.id;
+  const editingId = Number(form.dataset.editingId || 0);
 
   if (!userId) {
     console.error("No user loaded for transaction creation.");
@@ -52,15 +102,16 @@ document.addEventListener("submit", async (e) => {
   }
 
   try {
-    await createTransaction(userId, {
-      type,
-      amount,
-      date,
-      categoryId,
-    });
+    const payload = { type, amount, date, categoryId };
+    if (editingId) {
+      await updateTransaction(userId, editingId, payload);
+    } else {
+      await createTransaction(userId, payload);
+    }
     await loadCurrentUser(userId);
     form.reset();
-    document.querySelector(".modal")?.classList.remove("is-open");
+    setEditState(null, false);
+    closeModal();
   } catch (err) {
     console.error(err);
   }
