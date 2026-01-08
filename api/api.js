@@ -19,3 +19,17 @@ export async function loadCategories() {
   store.setCategories(kat);
   return kat;
 }
+
+export async function createTransaction(userId, payload) {
+  const r = await fetch(
+    `http://localhost:3001/api/users/${userId}/transactions`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    }
+  );
+
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}

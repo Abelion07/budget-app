@@ -6,10 +6,10 @@ export function bindTransactions(root = document) {
   store.subscribe(() => {
     const t = [...store.transactions].sort((a, b) => b.id - a.id);
 
-    // console.log(t);
+    if (!tablazatbody) return;
+    tablazatbody.innerHTML = "";
 
     t.forEach((element) => {
-      // console.log(element);
       const penz = element.osszeg;
       const tipus = element.tipus;
       tablazatbody.innerHTML += `<tr>

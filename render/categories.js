@@ -2,27 +2,25 @@ import { store } from "../store/store.js";
 
 export function bindCategories(root = document) {
   store.subscribe(() => {
-    const t = store.transactions;
-    const distinct = new Map();
+    const category_grid = document.querySelector(".category-grid");
+    const select_categories = document.querySelector(".select-categories");
     const w = store.categories;
+    if (!category_grid || !select_categories) return;
     if (!w || w.length === 0) return;
 
-    t.forEach((element) => {
-      const { kat_nev, icons } = element.categories;
-      distinct.set(kat_nev, icons); // ha már volt, felülírja
-    });
-    const category_grid = document.querySelector(".category-grid");
-    const result = [...distinct.entries()].sort((a, b) =>
-      a[0].localeCompare(b[0], "hu")
+    const sorted = [...w].sort((a, b) =>
+      a.kat_nev.localeCompare(b.kat_nev, "hu")
     );
-    result.forEach((element) => {
-      // console.log(element[1])
-      // console.log(element[0])
+
+    category_grid.innerHTML = "";
+    select_categories.innerHTML = "";
+
+    sorted.forEach((cat) => {
       category_grid.innerHTML += `<article class="card">
           <div class="cat-row">
-            <div class="cat-icon">${element[1]}</div>
+            <div class="cat-icon">${cat.icons}</div>
             <div class="cat-meta">
-              <div class="cat-title">${element[0]}</div>
+              <div class="cat-title">${cat.kat_nev}</div>
               <div class="muted">Alap kategória</div>
             </div>
             <div class="cat-actions">
@@ -31,9 +29,9 @@ export function bindCategories(root = document) {
           </div>
         </article>`;
     });
-    const select_categories = document.querySelector(".select-categories");
-    result.forEach((element) => {
-      select_categories.innerHTML += `<option>${element[0]}</option>`;
+
+    sorted.forEach((cat) => {
+      select_categories.innerHTML += `<option value="${cat.id}">${cat.kat_nev}</option>`;
     });
   });
 }
