@@ -75,14 +75,12 @@ DELETE /api/users/:id/transactions/:transactionId
 ```
 
 ## Deployment Notes
-Vercel + Render setup:
-- Frontend: Vercel
+Github Pages + Render setup:
+- Frontend: Github Pages
 - Backend: Render
-- Set environment variables in both
-- Add the Vercel URL to Supabase Auth redirect URLs
 
-Cookie notes (cross-site):
-- Use `SameSite=None; Secure` for the session cookie when Vercel + Render are on different domains.
 
 ## License
-ISC
+
+© 2026 Ábel Csukás. All rights reserved.
+No part of this project may be copied, distributed, or used without the prior written permission of the author.
