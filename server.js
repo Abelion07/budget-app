@@ -51,8 +51,16 @@ function getCookie(req, name) {
   return null;
 }
 
+function getAuthToken(req) {
+  const header = req.headers.authorization;
+  if (!header) return null;
+  const [scheme, token] = header.split(" ");
+  if (scheme !== "Bearer" || !token) return null;
+  return token.trim();
+}
+
 function getSession(req) {
-  const sid = getCookie(req, "sid");
+  const sid = getCookie(req, "sid") || getAuthToken(req);
   if (!sid) return null;
   const session = sessions.get(sid);
   if (!session) return null;
@@ -176,7 +184,7 @@ app.post("/api/login", async (req, res) => {
       expiresAt: Date.now() + SESSION_TTL_MS,
     });
     setSessionCookie(res, sid);
-    return res.json(fallback);
+    return res.json({ ...fallback, token: sid });
   }
 
   if (!data) {
@@ -200,7 +208,7 @@ app.post("/api/login", async (req, res) => {
   });
 
   setSessionCookie(res, sid);
-  return res.json(safeUser);
+  return res.json({ ...safeUser, token: sid });
 });
 
 app.post("/api/logout", (req, res) => {
