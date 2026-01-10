@@ -100,6 +100,21 @@ document.addEventListener("click", (e) => {
     });
 });
 
+document.addEventListener("click", (e) => {
+  const navLink = e.target.closest(".nav-item");
+  if (!navLink || navLink.classList.contains("uj-tranzakcio")) return;
+  const target = navLink.dataset.target || navLink.getAttribute("href");
+  if (!target) return;
+  e.preventDefault();
+  if (target === "top" || target === "#dashboard") {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+  const targetEl = document.querySelector(target);
+  if (!targetEl) return;
+  targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
 getSessionUser()
   .then((user) => {
     if (user?.id) {

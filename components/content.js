@@ -6,13 +6,21 @@ function elFromHTML(html) {
 
 function SummaryCards() {
   return elFromHTML(`
-    <div class="grid cards foinfok" id="dashboard">
+    <div class="grid cards foinfok">
       <!-- SUMMARY CARDS -->
       <!-- // DB: aggregált havi/aktuális időszak statisztikák -->
       <!-- // szükséges: totalIncome, totalExpense, netBalance -->
       <!-- // opcionális: prevIncome, prevExpense vagy százalékos változás -->
       <!-- // pénznem: userSettings.currency -->
-      
+
+      <article class="card">
+        <div class="card-head">
+          <div class="card-title">Egyenleg</div>
+          <div class="pill pill-blue">Összesen</div>
+        </div>
+        <div class="money osszesen">? Ft</div>
+      </article>
+
       <article class="card">
         <div class="card-head">
           <div class="card-title">Bevétel</div>
@@ -29,14 +37,6 @@ function SummaryCards() {
         <div class="money okiadas">- ? Ft</div>
       </article>
 
-      <article class="card">
-        <div class="card-head">
-          <div class="card-title">Egyenleg</div>
-          <div class="pill pill-blue">Összesen</div>
-        </div>
-        <div class="money osszesen">? Ft</div>
-      </article>
-
     </div>
   `);
 }
@@ -51,7 +51,7 @@ function ChartAndQuickOverview() {
           <div class="card-actions">
             <!-- // DB: nem kell; UI state: chartRange = monthly/yearly -->
             <button class="btn btn-chip">Havi</button>
-            <button class="btn btn-chip">Éves</button>
+            <!--<button class="btn btn-chip">Éves</button>-->
           </div>
         </div>
 
@@ -145,9 +145,9 @@ function CategoriesSection() {
       <!-- CATEGORIES -->
       <div class="section-head" id="categories">
         <h2>Kategóriák</h2>
-        <div class="section-actions">
+        <!--<div class="section-actions">
           <button class="btn">+ Új kategória</button>
-        </div>
+        </div>-->
       </div>
 
       <div class="grid category-grid">
@@ -209,7 +209,7 @@ export function Main() {
   content.appendChild(ChartAndQuickOverview());
   content.appendChild(TransactionsSection());
   content.appendChild(CategoriesSection());
-  content.appendChild(SettingsSection());
+  // content.appendChild(SettingsSection());
 
   main.appendChild(content);
   return main;

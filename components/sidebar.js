@@ -23,22 +23,22 @@ function SidebarNav() {
       <a class="nav-item btn uj-tranzakcio">
       <span class="ujtran ">💸</span> Új tranzakció
       </a>
-      <a class="nav-item active" href="#dashboard">
+      <a class="nav-item active" href="#dashboard" data-target="top">
         <span class="nav-icon">📊</span> Dashboard
       </a>
-      <a class="nav-item" href="#transactions">
+      <a class="nav-item" href="#transactions" data-target="#transactions">
         <span class="nav-icon">🧾</span> Tranzakciók
       </a>
-      <a class="nav-item" href="#categories">
+      <a class="nav-item" href="#categories" data-target="#categories">
         <span class="nav-icon">🏷️</span> Kategóriák
       </a>
-      <a class="nav-item" href="#settings">
-        <span class="nav-icon">⚙️</span> Beállítások
-      </a>
+      
     </nav>
   `);
 }
-
+//a class="nav-item" href="#settings">
+//       <span class="nav-icon">⚙️</span> Beállítások
+//     </a>
 function SidebarFooter() {
   return elFromHTML(`
     <div class="sidebar-footer">
