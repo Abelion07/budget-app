@@ -53,7 +53,7 @@ function SidebarFooter() {
       </div>
 
       <!-- // DB: nem kell; auth/logout action -->
-      <button class="btn btn-ghost">Kijelentkezés</button>
+      <button class="btn btn-ghost btn-logout">Kijelentkezés</button>
     </div>
   `);
 }

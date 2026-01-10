@@ -2,7 +2,8 @@ import { store } from "../store/store.js";
 
 export async function loadCurrentUser(userId) {
   const r = await fetch(
-    `http://localhost:3001/api/users/${userId}/transactions`
+    `http://localhost:3001/api/users/${userId}/transactions`,
+    { credentials: "include" }
   );
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
   const data = await r.json();
@@ -12,12 +13,49 @@ export async function loadCurrentUser(userId) {
 }
 
 export async function loadCategories() {
-  const q = await fetch("http://localhost:3001/api/allcategories");
+  const q = await fetch("http://localhost:3001/api/allcategories", {
+    credentials: "include",
+  });
   if (!q.ok) throw new Error(`HTTP ${q.status}`);
   const kat = await q.json();
 
   store.setCategories(kat);
   return kat;
+}
+
+export async function loginUser(email, password) {
+  const r = await fetch("http://localhost:3001/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+    credentials: "include",
+  });
+
+  if (!r.ok) {
+    const err = await r.json().catch(() => ({}));
+    const msg = err?.error || `HTTP ${r.status}`;
+    throw new Error(msg);
+  }
+
+  return r.json();
+}
+
+export async function logoutUser() {
+  const r = await fetch("http://localhost:3001/api/logout", {
+    method: "POST",
+    credentials: "include",
+  });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
+}
+
+export async function getSessionUser() {
+  const r = await fetch("http://localhost:3001/api/me", {
+    credentials: "include",
+  });
+  if (r.status === 401) return null;
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  return r.json();
 }
 
 export async function createTransaction(userId, payload) {
@@ -27,6 +65,7 @@ export async function createTransaction(userId, payload) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
+      credentials: "include",
     }
   );
 
@@ -41,6 +80,7 @@ export async function updateTransaction(userId, transactionId, payload) {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
+      credentials: "include",
     }
   );
 
@@ -51,7 +91,7 @@ export async function updateTransaction(userId, transactionId, payload) {
 export async function deleteTransaction(userId, transactionId) {
   const r = await fetch(
     `http://localhost:3001/api/users/${userId}/transactions/${transactionId}`,
-    { method: "DELETE" }
+    { method: "DELETE", credentials: "include" }
   );
 
   if (!r.ok) throw new Error(`HTTP ${r.status}`);
