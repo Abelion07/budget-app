@@ -2,7 +2,9 @@
 
 [![status](https://img.shields.io/badge/status-active-success)](https://img.shields.io/)
 [![node](https://img.shields.io/badge/node-18%2B-brightgreen)](https://nodejs.org/)
-[![license](https://img.shields.io/badge/license-ISC-blue)](https://opensource.org/licenses/ISC)
+[![javascript](https://img.shields.io/badge/Frontend-Vanilla%20JS-f7df1e?logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![express](https://img.shields.io/badge/Backend-Express.js-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![license](https://img.shields.io/badge/license-Copyright--Ábel--Csukás-blue)](https://github.com/Abelion07/)
 
 Personal portfolio + product card in one place. Built for clear focus: ship fast, track money, stay on top.
 
