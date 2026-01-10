@@ -17,7 +17,6 @@ Minimal budget tracker with session-based auth and a Supabase-backed data layer.
 - Quick login, fast client rendering
 - Protected API routes with cookie sessions
 - Supabase data access via server
-- Google login support (OAuth)
 - Clean UI with focused, distraction-free layout
 
 ## Tech Stack
