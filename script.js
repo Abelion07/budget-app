@@ -115,6 +115,16 @@ document.addEventListener("click", (e) => {
   targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
 });
 
+function updateCompactLayout() {
+  const root = document.documentElement;
+  const isCompact = window.innerWidth <= 1180;
+  root.classList.toggle("compact-layout", isCompact);
+}
+
+updateCompactLayout();
+window.addEventListener("resize", updateCompactLayout);
+window.addEventListener("orientationchange", updateCompactLayout);
+
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("/sw.js").catch((err) => {

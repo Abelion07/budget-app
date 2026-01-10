@@ -750,7 +750,6 @@ input:focus {
   }
   .brand-title,
   .brand-sub,
-  .user-meta,
   .nav-item span:not(.nav-icon) {
     display: none;
   }
@@ -774,7 +773,7 @@ input:focus {
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1180px) {
   .app {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr auto;
@@ -897,7 +896,7 @@ input:focus {
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 1180px) {
   .sidebar-footer {
     position: fixed;
     top: 12px;
@@ -945,9 +944,7 @@ input:focus {
   .filters{
     gap: 0;
   }
-  .filter-category{
-    /* width: 100px; */
-  }
+  
   h2{
     margin-right: 0;
   }
@@ -1046,4 +1043,179 @@ justify-content: space-around;
   .modal {
     z-index: 999;
   }
+}
+
+/* Tablet/phone compact layout (force mobile UI on iPad portrait) */
+.compact-layout .app {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  min-height: 100vh;
+}
+
+.compact-layout .sidebar {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  top: auto;
+  height: auto;
+  padding: 8px 10px;
+  border: 1px solid var(--glass-border);
+  border-radius: 22px;
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  z-index: 50;
+}
+.compact-layout .sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.18),
+      rgba(255, 255, 255, 0.08)
+    ),
+    rgba(12, 18, 36, 0.55);
+  backdrop-filter: blur(18px) saturate(150%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  z-index: -1;
+}
+
+.compact-layout .brand {
+  display: none;
+}
+
+.compact-layout .nav {
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 10px;
+}
+
+.compact-layout .nav-item {
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 4px;
+  font-size: 10px;
+  line-height: 1.1;
+  border-radius: 14px;
+}
+
+.compact-layout .nav-icon {
+  width: auto;
+  font-size: 18px;
+}
+
+.compact-layout .content {
+  padding: 96px 16px 120px;
+}
+
+.compact-layout .topbar {
+  position: static;
+  padding: 14px 16px 8px;
+  background: transparent;
+  border: 0;
+  backdrop-filter: none;
+}
+
+.compact-layout .search {
+  width: min(100%, 70vw);
+}
+
+.compact-layout .sidebar-footer {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 18px;
+  border: 1px solid var(--glass-border);
+  background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.18),
+      rgba(255, 255, 255, 0.08)
+    ),
+    rgba(12, 18, 36, 0.6);
+  backdrop-filter: blur(18px) saturate(150%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.compact-layout .sidebar-footer .user-card {
+  background: transparent;
+  border-color: transparent;
+  padding: 0;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.compact-layout .sidebar-footer .user-meta {
+  display: block;
+  min-width: 0;
+}
+
+.compact-layout .sidebar-footer .user-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.compact-layout .sidebar-footer .user-email {
+  display: none;
+}
+
+.compact-layout .sidebar-footer .btn-logout {
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.compact-layout .table {
+  min-width: 0;
+}
+.compact-layout .table thead {
+  display: none;
+}
+.compact-layout .table tbody tr {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px 12px;
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+}
+.compact-layout .table tbody td {
+  padding: 0;
+  border-bottom: 0;
+}
+.compact-layout .table tbody td:nth-child(1),
+.compact-layout .table tbody td:nth-child(3),
+.compact-layout .table tbody td:nth-child(5) {
+  display: none;
+}
+.compact-layout .table tbody td:nth-child(2) {
+  grid-column: 1 / 2;
+}
+.compact-layout .table tbody td:nth-child(4) {
+  grid-column: 2 / 3;
+  justify-self: end;
+  align-self: center;
+  text-align: right;
+}
+.compact-layout .tx-date {
+  display: block;
 }

@@ -1,7 +1,7 @@
 {
   "name": "Költségvetés Követő",
   "short_name": "Budget",
-  "start_url": "/",
+  "start_url": "https://abelion07.github.io/budget-app/",
   "display": "standalone",
   "background_color": "#0b1020",
   "theme_color": "#0b1020",
