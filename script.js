@@ -13,6 +13,7 @@ import { bindStatistics } from "./render/statistics.js";
 import { bindTransactions } from "./render/transactions.js";
 import { bindCategories } from "./render/categories.js";
 import { bindGraphics } from "./render/graphics.js";
+import { bindConnectionStatus } from "./render/connectionStatus.js";
 import { store } from "./store/store.js";
 
 const root = document.querySelector("#root");
@@ -31,6 +32,7 @@ bevetelkiadas(document);
 bindTransactions(document);
 bindCategories(document);
 bindGraphics(document);
+bindConnectionStatus(document);
 
 function setLoginError(message) {
   const errorEl = document.querySelector(".auth-error");

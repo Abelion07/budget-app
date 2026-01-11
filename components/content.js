@@ -4,6 +4,20 @@ function elFromHTML(html) {
   return t.content.firstElementChild;
 }
 
+function ConnectionStatus() {
+  return elFromHTML(`
+    <div class="backend-status" data-status="unknown" hidden>
+      <div class="backend-status-indicator" aria-hidden="true"></div>
+      <div class="backend-status-text" aria-live="polite">
+        Kapcsolat ellenőrzése...
+      </div>
+      <div class="backend-status-actions">
+        <button class="btn btn-small backend-status-retry" type="button">Újrapróbál</button>
+      </div>
+    </div>
+  `);
+}
+
 function SummaryCards() {
   return elFromHTML(`
     <div class="grid cards foinfok">
@@ -205,6 +219,7 @@ export function Main() {
   const content = document.createElement("section");
   content.className = "content";
 
+  content.appendChild(ConnectionStatus());
   content.appendChild(SummaryCards());
   content.appendChild(ChartAndQuickOverview());
   content.appendChild(TransactionsSection());

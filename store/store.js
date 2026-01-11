@@ -2,6 +2,7 @@ export const store = {
   user: null,
   transactions: [],
   categories: [], // ✅
+  backendStatus: "unknown",
   listeners: new Set(),
 
   setUser(data) {
@@ -12,6 +13,11 @@ export const store = {
 
   setCategories(kat) {
     this.categories = kat; // ✅ teljes lista
+    this.emit();
+  },
+
+  setBackendStatus(status) {
+    this.backendStatus = status;
     this.emit();
   },
 

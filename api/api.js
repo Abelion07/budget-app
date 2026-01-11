@@ -1,7 +1,7 @@
 import { store } from "../store/store.js";
 
-const API_BASE = "https://budgetapp-mc9i.onrender.com";
-// const API_BASE = "http://localhost:3001";
+// const API_BASE = "https://budgetapp-mc9i.onrender.com";
+const API_BASE = "http://localhost:3001";
 const TOKEN_KEY = "budgetapp_token";
 
 function getToken() {
@@ -24,8 +24,31 @@ function authHeaders(extra = {}) {
   return { ...extra, Authorization: `Bearer ${token}` };
 }
 
+function isServerError(status) {
+  return status >= 500 && status <= 599;
+}
+
+async function apiFetch(url, options = {}) {
+  if (store.backendStatus === "down" || store.backendStatus === "unknown") {
+    store.setBackendStatus("waking");
+  }
+
+  try {
+    const r = await fetch(url, options);
+    if (isServerError(r.status)) {
+      store.setBackendStatus("down");
+    } else {
+      store.setBackendStatus("ok");
+    }
+    return r;
+  } catch (err) {
+    store.setBackendStatus("down");
+    throw err;
+  }
+}
+
 export async function loadCurrentUser(userId) {
-  const r = await fetch(
+  const r = await apiFetch(
     `${API_BASE}/api/users/${userId}/transactions`,
     {
       credentials: "include",
@@ -40,7 +63,7 @@ export async function loadCurrentUser(userId) {
 }
 
 export async function loadCategories() {
-  const q = await fetch(`${API_BASE}/api/allcategories`, {
+  const q = await apiFetch(`${API_BASE}/api/allcategories`, {
     credentials: "include",
     headers: authHeaders(),
   });
@@ -52,7 +75,7 @@ export async function loadCategories() {
 }
 
 export async function loginUser(email, password) {
-  const r = await fetch(`${API_BASE}/api/login`, {
+  const r = await apiFetch(`${API_BASE}/api/login`, {
     method: "POST",
     headers: authHeaders({ "Content-Type": "application/json" }),
     body: JSON.stringify({ email, password }),
@@ -75,7 +98,7 @@ export async function loginUser(email, password) {
 }
 
 export async function logoutUser() {
-  const r = await fetch(`${API_BASE}/api/logout`, {
+  const r = await apiFetch(`${API_BASE}/api/logout`, {
     method: "POST",
     credentials: "include",
     headers: authHeaders(),
@@ -86,7 +109,7 @@ export async function logoutUser() {
 }
 
 export async function getSessionUser() {
-  const r = await fetch(`${API_BASE}/api/me`, {
+  const r = await apiFetch(`${API_BASE}/api/me`, {
     credentials: "include",
     headers: authHeaders(),
   });
@@ -96,7 +119,7 @@ export async function getSessionUser() {
 }
 
 export async function createTransaction(userId, payload) {
-  const r = await fetch(
+  const r = await apiFetch(
     `${API_BASE}/api/users/${userId}/transactions`,
     {
       method: "POST",
@@ -111,7 +134,7 @@ export async function createTransaction(userId, payload) {
 }
 
 export async function updateTransaction(userId, transactionId, payload) {
-  const r = await fetch(
+  const r = await apiFetch(
     `${API_BASE}/api/users/${userId}/transactions/${transactionId}`,
     {
       method: "PUT",
@@ -126,7 +149,7 @@ export async function updateTransaction(userId, transactionId, payload) {
 }
 
 export async function deleteTransaction(userId, transactionId) {
-  const r = await fetch(
+  const r = await apiFetch(
     `${API_BASE}/api/users/${userId}/transactions/${transactionId}`,
     {
       method: "DELETE",
