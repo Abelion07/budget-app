@@ -629,6 +629,15 @@ input[type="password"] {
   color: var(--text);
   outline: none;
 }
+select {
+  color-scheme: dark;
+  background-color: rgba(255, 255, 255, 0.06);
+}
+select option,
+select optgroup {
+  background-color: #0f1426;
+  color: var(--text);
+}
 select:focus,
 input:focus {
   border-color: rgba(100, 169, 255, 0.35);
