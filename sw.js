@@ -1,17 +1,20 @@
 const CACHE_NAME = "budget-app-v1";
+const APP_SHELL = [
+  "./",
+  "./index.html",
+  "./style_smooth.css",
+  "./script.js",
+  "./manifest.json",
+  "./pictures/favicon.png",
+  "./pictures/icon.svg",
+];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) =>
-      cache.addAll([
-        "/",
-        "/index.html",
-        "/style.css",
-        "/script.js",
-        "/manifest.json",
-        "/pictures/favicon.png",
-        "/pictures/icon.svg",
-      ])
+      cache.addAll(
+        APP_SHELL.map((path) => new URL(path, self.registration.scope).href)
+      )
     )
   );
   self.skipWaiting();
@@ -44,7 +47,9 @@ self.addEventListener("fetch", (event) => {
           caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
           return response;
         })
-        .catch(() => caches.match("/index.html"));
+        .catch(() =>
+          caches.match(new URL("./index.html", self.registration.scope).href)
+        );
     })
   );
 });

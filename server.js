@@ -13,6 +13,13 @@ app.set("trust proxy", 1);
 
 // --- CORS: GitHub Pages + local dev whitelist ---
 const DEFAULT_ALLOWED = [
+  "https://abelion07.github.io",
+  "http://192.168.100.195",
+  "http://192.168.100.195:3000",
+  "http://192.168.100.195:5173",
+  "http://192.168.100.195:5500",
+  "http://192.168.100.195:8000",
+  "http://192.168.100.195:8080",
   "http://localhost:3000",
   "http://localhost:5173", 
   "http://localhost:5500",
@@ -26,6 +33,11 @@ const envOrigins = (process.env.FRONTEND_ORIGIN || "")
   .filter(Boolean);
 
 const allowedOrigins = [...new Set([...DEFAULT_ALLOWED, ...envOrigins])];
+
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Private-Network", "true");
+  next();
+});
 
 app.use(
   cors({

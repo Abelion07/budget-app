@@ -129,9 +129,11 @@ window.addEventListener("orientationchange", updateCompactLayout);
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch((err) => {
-      console.error("Service worker registration failed:", err);
-    });
+    navigator.serviceWorker
+      .register(new URL("./sw.js", import.meta.url).href)
+      .catch((err) => {
+        console.error("Service worker registration failed:", err);
+      });
   });
 }
 

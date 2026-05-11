@@ -1,8 +1,13 @@
 import { store } from "../store/store.js";
 
-const API_BASE = "http://192.168.100.195:3001";
-// const API_BASE = "https://budgetapp-mc9i.onrender.com";
-// const API_BASE = "http://localhost:3001";
+const PI_API_BASE = "http://192.168.100.195:3001";
+const API_BASE_OVERRIDE_KEY = "budgetapp_api_base";
+const API_BASE =
+  localStorage.getItem(API_BASE_OVERRIDE_KEY) ||
+  (window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:3001"
+    : PI_API_BASE);
 const TOKEN_KEY = "budgetapp_token";
 
 function getToken() {
