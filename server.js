@@ -12,7 +12,13 @@ const app = express();
 app.set("trust proxy", 1);
 
 // --- CORS: GitHub Pages + local dev whitelist ---
-const DEFAULT_ALLOWED = ["http://localhost:5173", "http://localhost:5500"];
+const DEFAULT_ALLOWED = [
+  "http://localhost:3000",
+  "http://localhost:5173", 
+  "http://localhost:5500",
+  "http://localhost:8000",
+  "http://localhost:8080"
+];
 
 const envOrigins = (process.env.FRONTEND_ORIGIN || "")
   .split(",")
@@ -477,4 +483,6 @@ app.get("/api/status", (req, res) => {
 
 // --- listen ---
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(`API listening on :${PORT}`));
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`API listening on :${PORT}`);
+});

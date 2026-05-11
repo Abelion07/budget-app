@@ -1,6 +1,7 @@
 import { store } from "../store/store.js";
 
-const API_BASE = "https://budgetapp-mc9i.onrender.com";
+const API_BASE = "http://192.168.100.195:3001";
+// const API_BASE = "https://budgetapp-mc9i.onrender.com";
 // const API_BASE = "http://localhost:3001";
 const TOKEN_KEY = "budgetapp_token";
 
